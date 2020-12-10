@@ -1,5 +1,12 @@
 import random
 
+"""
+This Class holds all the songs, wildcard songs and brackets in lists.
+After construction you can input the songs and randomly generate a bracket. This may include selecting wildcard songs.
+You may then input the votes and promote the brackets.
+New brackets will be places at the end of the list.
+"""
+
 
 class MusicBracket:
     def __init__(self, bracket_size):
@@ -71,6 +78,14 @@ class MusicBracket:
                                     len(self.bracket) + 1))
 
 
+"""
+These are the brackets used in the MusicBracket class.
+They will contain 2 songs and the votes for each song.
+After voting happens a winner will be declared in the bracket.
+In the event of a tie, a winner will be declared randomly.
+"""
+
+
 class Bracket:
     def __init__(self, song_a, song_b, bracket_number):
         self.song_a = song_a
@@ -110,6 +125,11 @@ class Bracket:
                 self.winner = self.song_b
 
         return self.winner
+
+
+"""
+This class will contain the artist and the song name.
+"""
 
 
 class Song:
