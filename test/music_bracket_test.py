@@ -77,19 +77,24 @@ class StandardItems:
 
 class TestSong(unittest.TestCase):
 
+    def setUp(self):
+        self.song = Song("test_song_name", "test_artist_name")
+
     def test_create_song(self):
-        test = Song("test_song_name", "test_artist_name")
-        self.assertEqual(str(test),
+        self.assertEqual(str(self.song),
                          'test_song_name by test_artist_name',
                          "Song output for original input is incorrect")
 
-        test.set_name("test_alternate_song_name")
-        self.assertEqual(str(test),
+    def test_create_set_song(self):
+        self.song.set_name("test_alternate_song_name")
+        self.assertEqual(str(self.song),
                          'test_alternate_song_name by test_artist_name',
                          "Song output for 1st alternate input is incorrect")
 
-        test.set_artist("test_alternate_artist_name")
-        self.assertEqual(str(test),
+    def test_create_set_set_song(self):
+        self.song.set_name("test_alternate_song_name")
+        self.song.set_artist("test_alternate_artist_name")
+        self.assertEqual(str(self.song),
                          'test_alternate_song_name by test_alternate_artist_name',
                          "Song output for 2nd alternate input is incorrect")
 
