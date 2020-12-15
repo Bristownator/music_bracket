@@ -76,7 +76,6 @@ class StandardItems:
 
 
 class TestSong(unittest.TestCase):
-
     def setUp(self):
         self.song = Song("test_song_name", "test_artist_name")
 
@@ -112,7 +111,6 @@ class TestSong(unittest.TestCase):
 
 
 class TestBracket(unittest.TestCase):
-
     def setUp(self):
         self.song_name = "test_song_name"
         self.alternate_song_name = "test_alternate_song_name"
@@ -149,6 +147,59 @@ class TestBracket(unittest.TestCase):
                      'Bracket 0: Winner ' + str(self.second_song) + ' with 3 votes, Loser '
                      + str(self.first_song) + ' with 3 votes']
         self.assertIn(str(test), test_list)
+
+
+class TestMusicBracket(unittest.TestCase):
+    def setUp(self):
+        pass
+
+    def test_music_bracket_creation(self):
+        pass
+
+    def test_music_bracket_creation_bad_bracket_size_minus_input(self):
+        pass
+
+    def test_music_bracket_creation_bad_bracket_size_invalid_input(self):
+        pass
+
+    def test_music_bracket_add_song(self):
+        pass
+
+    def test_music_bracket_add_wildcard(self):
+        pass
+
+    def test_music_bracket_pick_random_wildcard_song(self):
+        pass
+
+    def test_music_bracket_add_wildcard_to_songs(self):
+        pass
+
+    def test_music_bracket_pick_random_song(self):
+        pass
+
+    def test_music_bracket_dictionary_output(self):
+        pass
+
+    def test_music_bracket_get_bracket(self):
+        pass
+
+    def test_music_bracket_get_empty_bracket(self):
+        pass
+
+    def test_music_bracket_vote(self):
+        pass
+
+    def test_music_bracket_vote_none_bracket(self):
+        pass
+
+    def test_music_bracket_promote(self):
+        pass
+
+    def test_music_bracket_promote_none_bracket(self):
+        pass
+
+    def test_music_bracket_promote_none_winner(self):
+        pass
 
 
 if __name__ == '__main__':
