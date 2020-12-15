@@ -1,6 +1,6 @@
 import unittest
 
-from src.music_bracket import Song, MusicBracket
+from src.music_bracket import Song, MusicBracket, Bracket
 
 
 class StandardItems:
@@ -93,16 +93,57 @@ class TestSong(unittest.TestCase):
                          'test_alternate_song_name by test_alternate_artist_name',
                          "Song output for 2nd alternate input is incorrect")
 
-    def test_none_song(self):
+    def test_song_none(self):
         test = Song(None, None)
         self.assertEqual(str(test), 'None by None')
 
-    def test_wrong_input_song(self):
+    def test_song_int_input(self):
         test = Song(5, 2)
         self.assertEqual(str(test), '5 by 2')
 
+    def test_song_tuple_input(self):
         test = Song(("Song", "name"), ("Artist", "Name"))
         self.assertEqual(str(test), '(\'Song\', \'name\') by (\'Artist\', \'Name\')')
+
+
+class TestBracket(unittest.TestCase):
+
+    def setUp(self):
+        self.song_name = "test_song_name"
+        self.alternate_song_name = "test_alternate_song_name"
+        self.artist_name = "test_artist_name"
+        self.alternate_artist_name = "test_alternate_artist_name"
+        self.bracket_number = 0
+
+        self.first_song = Song(self.song_name, self.artist_name)
+        self.second_song = Song(self.alternate_song_name, self.alternate_artist_name)
+
+        self.bracket = Bracket(self.first_song, self.second_song, self.bracket_number)
+
+    def test_create_bracket_blank(self):
+        self.assertEqual(str(self.bracket), 'Bracket 0: ' + self.song_name + ' by '
+                         + self.artist_name + ' vs ' + self.alternate_song_name + ' by '
+                         + self.alternate_artist_name)
+
+    def test_bracket_first_song_winner(self):
+        self.bracket.vote(1, 3)
+        self.assertEqual(str(self.bracket), 'Bracket 0: Winner ' + self.alternate_song_name
+                         + ' by ' + self.alternate_artist_name + ' with 3 votes, Loser '
+                         + self.song_name + ' by ' + self.artist_name + ' with 1 votes')
+
+    def test_bracket_second_song_winner(self):
+        self.bracket.vote(3, 1)
+        self.assertEqual(str(self.bracket), 'Bracket 0: Winner ' + str(self.first_song)
+                         + ' with 3 votes, Loser ' + str(self.second_song) + ' with 1 votes')
+
+    def test_bracket_tie(self):
+        test = Bracket(self.first_song, self.second_song, self.bracket_number)
+        test.vote(3, 3)
+        test_list = ['Bracket 0: Winner ' + str(self.first_song) + ' with 3 votes, Loser '
+                     + str(self.second_song) + ' with 3 votes',
+                     'Bracket 0: Winner ' + str(self.second_song) + ' with 3 votes, Loser '
+                     + str(self.first_song) + ' with 3 votes']
+        self.assertIn(str(test), test_list)
 
 
 if __name__ == '__main__':
