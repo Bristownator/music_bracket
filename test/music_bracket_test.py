@@ -4,7 +4,9 @@ from src.music_bracket import Song, MusicBracket
 
 
 class StandardItems:
-    def standard_bracket(self):
+
+    @staticmethod
+    def standard_bracket():
         song1 = Song("Dragonball Durag", "Thundercat")
         song2 = Song("In Too Deep", "Eminem")
         song3 = Song("I Won't Be Home for Christmas", "Poppy")
@@ -73,11 +75,34 @@ class StandardItems:
         test_music_draft.vote(14, 3, 3)
 
 
-class SongTests(unittest.TestCase):
+class TestSong(unittest.TestCase):
 
-    def create_song_test(self):
+    def test_create_song(self):
         test = Song("test_song_name", "test_artist_name")
-        self.assertEqual(test, "test_song_name by test_artist_name")
+        self.assertEqual(str(test),
+                         'test_song_name by test_artist_name',
+                         "Song output for original input is incorrect")
+
+        test.set_name("test_alternate_song_name")
+        self.assertEqual(str(test),
+                         'test_alternate_song_name by test_artist_name',
+                         "Song output for 1st alternate input is incorrect")
+
+        test.set_artist("test_alternate_artist_name")
+        self.assertEqual(str(test),
+                         'test_alternate_song_name by test_alternate_artist_name',
+                         "Song output for 2nd alternate input is incorrect")
+
+    def test_none_song(self):
+        test = Song(None, None)
+        self.assertEqual(str(test), 'None by None')
+
+    def test_wrong_input_song(self):
+        test = Song(5, 2)
+        self.assertEqual(str(test), '5 by 2')
+
+        test = Song(("Song", "name"), ("Artist", "Name"))
+        self.assertEqual(str(test), '(\'Song\', \'name\') by (\'Artist\', \'Name\')')
 
 
 if __name__ == '__main__':
