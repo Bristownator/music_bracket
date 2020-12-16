@@ -10,14 +10,12 @@ New brackets will be places at the end of the list.
 
 class MusicBracket:
     def __init__(self, bracket_size):
+        if bracket_size <= 0:
+            raise ValueError('Bracket is not a positive integer')
         check = bracket_size
         while check > 0:
             if check % 2 > 0:
-                try:
-                    raise ValueError('Bracket size not divisible by 2')
-                except ValueError:
-                    print(check)
-                    raise
+                raise ValueError('Bracket size not divisible by 2')
             check = check / 2
             if check == 1:
                 break
@@ -36,7 +34,7 @@ class MusicBracket:
     def pick_random_wildcard(self):
         return self.wildcard_songs[random.randint(0, len(self.wildcard_songs) - 1)]
 
-    def add_wildcard_to_songs(self):
+    def move_wildcard_to_songs(self):
         selected_song = self.pick_random_wildcard()
         self.songs.append(selected_song)
         self.wildcard_songs.remove(selected_song)
