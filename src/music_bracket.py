@@ -49,6 +49,9 @@ class MusicBracket:
         return self.songs[random.randint(0, len(self.songs) - 1)]
 
     def create_bracket(self):
+        if len(self.bracket) > 0:
+            raise Exception("Bracket has already been generated!")
+
         for i in range(int(self.bracket_size / 2)):
             song_a = self.pick_random_song()
             self.songs.remove(song_a)
@@ -69,11 +72,16 @@ class MusicBracket:
         return self.bracket[bracket_num]
 
     def promote(self):
-        self.bracket.append(Bracket(self.bracket[
-                                        len(self.bracket) - (self.bracket_size - len(self.bracket))].winner,
-                                    self.bracket[
-                                        len(self.bracket) - (self.bracket_size - len(self.bracket)) + 1].winner,
-                                    len(self.bracket) + 1))
+        bracket_a = self.bracket[len(self.bracket) - (self.bracket_size - len(self.bracket))]
+        bracket_b = self.bracket[len(self.bracket) - (self.bracket_size - len(self.bracket)) + 1]
+
+        if bracket_a.winner is None:
+            raise ValueError("Bracket " + str(bracket_a.bracket_number) + " is None!")
+
+        if bracket_b.winner is None:
+            raise ValueError("Bracket" + str(bracket_b.bracket_number) + " is None!")
+
+        self.bracket.append(Bracket(bracket_a.winner, bracket_b.winner, len(self.bracket) + 1))
 
 
 """
@@ -155,3 +163,18 @@ class Interface:
     def input_wildcard_song(self):
         self.bracket.add_wildcard(Song(input("Song name: "), input("Artist name: ")))
 
+
+# music_bracket = MusicBracket(8)
+#
+# music_bracket.add_song(Song("1", "_"))
+# music_bracket.add_song(Song("2", "_"))
+# music_bracket.add_song(Song("3", "_"))
+# music_bracket.add_song(Song("4", "_"))
+# music_bracket.add_song(Song("5", "_"))
+# music_bracket.add_song(Song("6", "_"))
+# music_bracket.add_song(Song("7", "_"))
+# music_bracket.add_song(Song("8", "_"))
+#
+# music_bracket.create_bracket()
+#
+# print(music_bracket.get_bracket())

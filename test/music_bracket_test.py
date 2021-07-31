@@ -245,34 +245,96 @@ class TestMusicBracket(unittest.TestCase):
                                           str([Bracket(self.first_song,
                                                        self.second_song, 1)])])
 
+    def test_music_bracket_create_double_bracket(self):
+        test = MusicBracket(2)
+        test.add_song(self.first_song)
+        test.add_song(self.second_song)
+        test.create_bracket()
+        with self.assertRaises(Exception):
+            test.create_bracket()
+
+        test.add_song(self.third_song)
+        test.add_song(self.forth_song)
+        with self.assertRaises(Exception):
+            test.create_bracket()
+
     def test_music_bracket_get_bracket(self):
         test = MusicBracket(2)
         test.add_song(self.first_song)
         test.add_song(self.second_song)
         test.create_bracket()
         self.assertIn(test.get_bracket(),
-                         [str(Bracket(self.first_song, self.second_song, 1)) + '\n',
-                          str(Bracket(self.second_song, self.first_song, 1)) + '\n'])
+                      [str(Bracket(self.first_song, self.second_song, 1)) + '\n',
+                       str(Bracket(self.second_song, self.first_song, 1)) + '\n'])
 
     def test_music_bracket_get_empty_bracket(self):
         test = MusicBracket(2)
-        # test.create_bracket()
-        # self.assertEqual(test.get_bracket(), "")
+        with self.assertRaises(ValueError):
+            test.create_bracket()
 
     def test_music_bracket_vote(self):
-        pass
+        test = MusicBracket(2)
+        test.add_song(self.first_song)
+        test.add_song(self.second_song)
+        test.create_bracket()
+
+        test.vote(0, 1, 2)
+        self.assertEqual(test.bracket[0].song_b, test.bracket[0].winner)
+
+        test.vote(0, 2, 1)
+        self.assertEqual(test.bracket[0].song_a, test.bracket[0].winner)
+
+        test.vote(0, 1, 1)
+        self.assertIn(test.bracket[0].winner, [self.first_song, self.second_song])
 
     def test_music_bracket_vote_none_bracket(self):
-        pass
+        test = MusicBracket(2)
+        with self.assertRaises(IndexError):
+            test.vote(0, 1, 1)
 
     def test_music_bracket_promote(self):
-        pass
+        test = MusicBracket(4)
+        test.add_song(self.first_song)
+        test.add_song(self.second_song)
+        test.add_song(self.third_song)
+        test.add_song(self.forth_song)
+        test.create_bracket()
+        test.vote(0, 2, 1)
+        test.vote(1, 2, 1)
+        test.promote()
+        self.assertEqual(test.bracket.__len__(), 3)
+        self.assertIn(test.bracket[2].song_a, [self.first_song, self.second_song, self.third_song, self.forth_song])
+        self.assertIn(test.bracket[2].song_b, [self.first_song, self.second_song, self.third_song, self.forth_song])
+        self.assertNotEqual(test.bracket[2].song_a, test.bracket[2].song_b)
 
     def test_music_bracket_promote_none_bracket(self):
-        pass
+        test = MusicBracket(2)
+        with self.assertRaises(IndexError):
+            test.promote()
+
+        test.add_song(self.first_song)
+        test.add_song(self.second_song)
+        with self.assertRaises(IndexError):
+            test.promote()
+
+        test.create_bracket()
+        with self.assertRaises(IndexError):
+            test.promote()
 
     def test_music_bracket_promote_none_winner(self):
-        pass
+        test = MusicBracket(4)
+        test.add_song(self.first_song)
+        test.add_song(self.second_song)
+        test.add_song(self.third_song)
+        test.add_song(self.forth_song)
+        test.create_bracket()
+
+        with self.assertRaises(ValueError):
+            test.promote()
+
+        test.vote(0, 1, 2)
+        with self.assertRaises(ValueError):
+            test.promote()
 
 
 if __name__ == '__main__':
