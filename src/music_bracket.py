@@ -139,9 +139,10 @@ This class will contain the artist and the song name.
 
 
 class Song:
-    def __init__(self, name, artist):
+    def __init__(self, name, artist, picker=0):
         self.name = name
         self.artist = artist
+        self.picker = picker
 
     def __repr__(self):
         return "%s by %s" % (self.name, self.artist)

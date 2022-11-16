@@ -83,12 +83,14 @@ class TestSong(unittest.TestCase):
         self.assertEqual(str(self.song),
                          'test_song_name by test_artist_name',
                          "Song output for original input is incorrect")
+        self.assertEqual(self.song.picker, 0)
 
     def test_create_set_song(self):
         self.song.set_name("test_alternate_song_name")
         self.assertEqual(str(self.song),
                          'test_alternate_song_name by test_artist_name',
                          "Song output for 1st alternate input is incorrect")
+        self.assertEqual(self.song.picker, 0)
 
     def test_create_set_set_song(self):
         self.song.set_name("test_alternate_song_name")
@@ -96,10 +98,12 @@ class TestSong(unittest.TestCase):
         self.assertEqual(str(self.song),
                          'test_alternate_song_name by test_alternate_artist_name',
                          "Song output for 2nd alternate input is incorrect")
+        self.assertEqual(self.song.picker, 0)
 
     def test_song_none(self):
-        test = Song(None, None)
+        test = Song(None, None, None)
         self.assertEqual(str(test), 'None by None')
+        self.assertEqual(test.picker, None)
 
     def test_song_int_input(self):
         test = Song(5, 2)
@@ -108,6 +112,10 @@ class TestSong(unittest.TestCase):
     def test_song_tuple_input(self):
         test = Song(("Song", "name"), ("Artist", "Name"))
         self.assertEqual(str(test), '(\'Song\', \'name\') by (\'Artist\', \'Name\')')
+
+    def test_song_create_picker(self):
+        test = Song("Song", "Artist", "Thomas Bristow")
+        self.assertEqual(test.picker, "Thomas Bristow")
 
 
 class TestBracket(unittest.TestCase):
