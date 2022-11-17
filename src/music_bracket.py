@@ -24,9 +24,15 @@ class MusicBracket:
         self.wildcard_songs = []
         self.bracket_size = bracket_size
         self.bracket = []
+        self.pickers = []
 
     def add_song(self, song):
         self.songs.append(song)
+        for i in range(len(self.pickers)):
+            if self.pickers[i]["Picker Name"] == song.picker:
+                self.pickers[i]["Songs"] += 1
+                return
+        self.pickers.append({"Songs": 1, "Picker Name": song.picker})
 
     def add_wildcard(self, song):
         self.wildcard_songs.append(song)
@@ -36,7 +42,7 @@ class MusicBracket:
 
     def move_wildcard_to_songs(self):
         selected_song = self.pick_random_wildcard()
-        self.songs.append(selected_song)
+        self.add_song(selected_song)
         self.wildcard_songs.remove(selected_song)
         return selected_song
 
