@@ -83,14 +83,14 @@ class TestSong(unittest.TestCase):
         self.assertEqual(str(self.song),
                          'test_song_name by test_artist_name',
                          "Song output for original input is incorrect")
-        self.assertEqual(self.song.picker, 0)
+        self.assertEqual(self.song.picker, "hidden")
 
     def test_create_set_song(self):
         self.song.set_name("test_alternate_song_name")
         self.assertEqual(str(self.song),
                          'test_alternate_song_name by test_artist_name',
                          "Song output for 1st alternate input is incorrect")
-        self.assertEqual(self.song.picker, 0)
+        self.assertEqual(self.song.picker, "hidden")
 
     def test_create_set_set_song(self):
         self.song.set_name("test_alternate_song_name")
@@ -98,7 +98,7 @@ class TestSong(unittest.TestCase):
         self.assertEqual(str(self.song),
                          'test_alternate_song_name by test_alternate_artist_name',
                          "Song output for 2nd alternate input is incorrect")
-        self.assertEqual(self.song.picker, 0)
+        self.assertEqual(self.song.picker, "hidden")
 
     def test_song_none(self):
         test = Song(None, None, None)
@@ -199,13 +199,15 @@ class TestMusicBracket(unittest.TestCase):
         test = MusicBracket(2)
         test.add_song(self.first_song)
         test.add_song(self.second_song)
-        self.assertEqual(test.songs, [self.first_song, self.second_song])
+        self.assertEqual(test.songs, [{'Song Picker': 'first', 'Songs': [self.first_song]},
+                                      {'Song Picker': 'second', 'Songs': [self.second_song]}])
 
     def test_music_bracket_add_wildcard(self):
         test = MusicBracket(2)
         test.add_wildcard(self.first_song)
         test.add_wildcard(self.second_song)
-        self.assertEqual(test.wildcard_songs, [self.first_song, self.second_song])
+        self.assertEqual(test.wildcard_songs, [{'Song Picker': 'first', 'Songs': [self.first_song]},
+                                               {'Song Picker': 'second', 'Songs': [self.second_song]}])
 
     def test_music_bracket_pick_random_wildcard_song(self):
         test = MusicBracket(2)
@@ -215,23 +217,32 @@ class TestMusicBracket(unittest.TestCase):
             self.assertIn(test.pick_random_wildcard(),
                           [self.first_song, self.second_song])
 
-    def test_music_bracket_get_picker(self):
-        test = MusicBracket(4)
-        self.forth_song.picker = "first"
-        test.add_song(self.first_song)
-        test.add_song(self.second_song)
-        test.add_song(self.third_song)
-        test.add_song(self.forth_song)
-        self.assertEqual(test.pickers, [{'Picker Name': 'first', 'Songs': 2},
-                                        {'Picker Name': 'second', 'Songs': 1},
-                                        {'Picker Name': 'third', 'Songs': 1}])
+    def test_music_bracket_check_empty_wildcard_songs(self):
+        pass
+
+    def test_music_bracket_check_empty_wildcard_songs_empty(self):
+        pass
+
+    def test_music_bracket_check_double_empty_wildcard_songs(self):
+        pass
+
+    def test_music_bracket_pop_random_wildcard_song(self):
+        test = MusicBracket(2)
+        test.add_wildcard(self.first_song)
+        test.add_wildcard(self.second_song)
+        for x in range(2):
+            self.assertIn(test.pop_random_wildcard(),
+                          [self.first_song, self.second_song])
+
+    def test_music_bracket_pop_empty_random_wildcard_song(self):
+        pass
 
     def test_music_bracket_add_wildcard_to_songs(self):
         test = MusicBracket(2)
         test.add_wildcard(self.first_song)
         test.move_wildcard_to_songs()
         self.assertEqual(test.wildcard_songs, [])
-        self.assertEqual(test.songs, [self.first_song])
+        self.assertEqual(test.songs, [{'Song Picker': 'first', 'Songs': [self.first_song]}])
 
     def test_music_bracket_add_wildcard_to_songs_double_wildcard(self):
         test = MusicBracket(2)
@@ -248,6 +259,21 @@ class TestMusicBracket(unittest.TestCase):
         for x in range(5):
             self.assertIn(test.pick_random_song(),
                           [self.first_song, self.second_song])
+
+    def test_music_bracket_check_empty_songs(self):
+        pass
+
+    def test_music_bracket_check_empty_songs_empty(self):
+        pass
+
+    def test_music_bracket_check_double_empty_songs(self):
+        pass
+
+    def test_music_bracket_pop_random_song(self):
+        pass
+
+    def test_music_bracket_pop_empty_random_song(self):
+        pass
 
     def test_music_bracket_dictionary_output(self):
         test = MusicBracket(4)

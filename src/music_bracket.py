@@ -24,46 +24,84 @@ class MusicBracket:
         self.wildcard_songs = []
         self.bracket_size = bracket_size
         self.bracket = []
-        self.pickers = []
 
     def add_song(self, song):
-        self.songs.append(song)
-        for i in range(len(self.pickers)):
-            if self.pickers[i]["Picker Name"] == song.picker:
-                self.pickers[i]["Songs"] += 1
+        if len(self.songs) == 0:
+            self.songs.append({"Song Picker": song.picker, "Songs": [song]})
+            return
+        for i in range(len(self.songs)):
+            if self.songs[i]["Song Picker"] == song.picker:
+                self.songs[i]["Songs"].append(song)
                 return
-        self.pickers.append({"Songs": 1, "Picker Name": song.picker})
+        self.songs.append({"Song Picker": song.picker, "Songs": [song]})
+        return
 
     def add_wildcard(self, song):
-        self.wildcard_songs.append(song)
+        if len(self.wildcard_songs) == 0:
+            self.wildcard_songs.append({"Song Picker": song.picker, "Songs": [song]})
+            return
+        for i in range(len(self.wildcard_songs)):
+            if self.wildcard_songs[i]["Song Picker"] == song.picker:
+                self.wildcard_songs[i]["Songs"].append(song)
+                return
+        self.wildcard_songs.append({"Song Picker": song.picker, "Songs": [song]})
+        return
+
+    def check_empty_wildcard_songs(self, song_picker):
+        if not self.wildcard_songs[song_picker]['Songs']:
+            del self.wildcard_songs[song_picker]
 
     def pick_random_wildcard(self):
-        return self.wildcard_songs[random.randint(0, len(self.wildcard_songs) - 1)]
+        temp_random = random.randint(0, len(self.wildcard_songs) - 1)
+        return self.wildcard_songs[temp_random]["Songs"][
+            random.randint(0, len(self.wildcard_songs[temp_random]["Songs"]) - 1)]
+
+    def pop_random_wildcard(self):
+        temp_random = random.randint(0, len(self.wildcard_songs) - 1)
+        output = self.wildcard_songs[temp_random]["Songs"].pop(
+            random.randint(0, len(self.wildcard_songs[temp_random]["Songs"]) - 1))
+        self.check_empty_wildcard_songs(temp_random)
+        return output
 
     def move_wildcard_to_songs(self):
-        selected_song = self.pick_random_wildcard()
+        selected_song = self.pop_random_wildcard()
         self.add_song(selected_song)
-        self.wildcard_songs.remove(selected_song)
         return selected_song
 
     def output(self):
-        return dict(Songs=self.songs,
-                    Wildcard_Songs=self.wildcard_songs,
-                    Bracket_Size=self.bracket_size)
+        output = dict(Songs=[],
+                      Wildcard_Songs=[],
+                      Bracket_Size=self.bracket_size)
+        for i in range(len(self.songs)):
+            output["Songs"].extend(self.songs[i]["Songs"])
+
+        for i in range(len(self.wildcard_songs)):
+            output["Wildcard_Songs"].extend(self.wildcard_songs[i]["Songs"])
+        return output
+
+    def check_empty_songs(self, song_picker):
+        if not self.songs[song_picker]['Songs']:
+            del self.songs[song_picker]
 
     def pick_random_song(self):
-        return self.songs[random.randint(0, len(self.songs) - 1)]
+        temp_random = random.randint(0, len(self.songs) - 1)
+        return self.songs[temp_random]["Songs"][random.randint(0, len(self.songs[temp_random]["Songs"]) - 1)]
+
+    def pop_random_song(self):
+        temp_random = random.randint(0, len(self.songs) - 1)
+        output = self.songs[temp_random]["Songs"].pop(
+            random.randint(0, len(self.songs[temp_random]["Songs"]) - 1))
+        self.check_empty_songs(temp_random)
+        return output
 
     def create_bracket(self):
         if len(self.bracket) > 0:
             raise Exception("Bracket has already been generated!")
 
         for i in range(int(self.bracket_size / 2)):
-            song_a = self.pick_random_song()
-            self.songs.remove(song_a)
+            song_a = self.pop_random_song()
 
-            song_b = self.pick_random_song()
-            self.songs.remove(song_b)
+            song_b = self.pop_random_song()
 
             self.bracket.append(Bracket(song_a, song_b, i + 1))
 
@@ -145,7 +183,7 @@ This class will contain the artist and the song name.
 
 
 class Song:
-    def __init__(self, name, artist, picker=0):
+    def __init__(self, name, artist, picker="hidden"):
         self.name = name
         self.artist = artist
         self.picker = picker
