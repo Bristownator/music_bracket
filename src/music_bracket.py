@@ -48,8 +48,9 @@ class MusicBracket:
         return
 
     def check_empty_wildcard_songs(self, song_picker):
-        if not self.wildcard_songs[song_picker]['Songs']:
-            del self.wildcard_songs[song_picker]
+        if song_picker < len(self.wildcard_songs):
+            if not self.wildcard_songs[song_picker]['Songs']:
+                del self.wildcard_songs[song_picker]
 
     def pick_random_wildcard(self):
         temp_random = random.randint(0, len(self.wildcard_songs) - 1)
@@ -80,8 +81,9 @@ class MusicBracket:
         return output
 
     def check_empty_songs(self, song_picker):
-        if not self.songs[song_picker]['Songs']:
-            del self.songs[song_picker]
+        if song_picker < len(self.songs):
+            if not self.songs[song_picker]['Songs']:
+                del self.songs[song_picker]
 
     def pick_random_song(self):
         temp_random = random.randint(0, len(self.songs) - 1)
